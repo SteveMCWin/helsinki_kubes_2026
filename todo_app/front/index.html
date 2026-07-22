@@ -2,19 +2,51 @@
 <html>
 <head>
 	<title>Todo App</title>
-	<style>
-		body {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
-		img {
-			border-radius: 12px;
-		}
-	</style>
+	<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 	<h1>Todo App</h1>
 	<img src="/image.jpg" alt="Random image">
+
+	<div class="input-row">
+		<input id="todo-input" type="text" maxlength="140" placeholder="New todo">
+		<button id="todo-send">Send</button>
+	</div>
+	<ul id="todo-list"></ul>
+
+	<script>
+		async function loadTodos() {
+			const res = await fetch("/todos");
+			const todos = await res.json();
+
+			const list = document.getElementById("todo-list");
+			list.innerHTML = "";
+			todos.forEach(todo => {
+				const li = document.createElement("li");
+				li.textContent = todo.text;
+				list.appendChild(li);
+			});
+		}
+
+		async function sendTodo() {
+			const input = document.getElementById("todo-input");
+			const text = input.value.trim();
+			if (!text || text.length > 140) {
+				return;
+			}
+
+			await fetch("/todos", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ text: text }),
+			});
+
+			input.value = "";
+			loadTodos();
+		}
+
+		document.getElementById("todo-send").addEventListener("click", sendTodo);
+		loadTodos();
+	</script>
 </body>
 </html>
