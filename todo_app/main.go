@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -12,6 +13,9 @@ func main() {
 		port = "8080"
 	}
 
+	r := gin.Default()
+	r.StaticFile("/", "./front/index.html")
+
 	fmt.Printf("Server started in port %s\n", port)
-	http.ListenAndServe(":"+port, nil)
+	r.Run(":" + port)
 }
