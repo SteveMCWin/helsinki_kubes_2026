@@ -1,4 +1,4 @@
-module log_output
+module reader
 
 go 1.26.5
 

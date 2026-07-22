@@ -12,6 +12,17 @@ spec:
       labels:
         app: hashgenerator
     spec:
+      volumes:
+        - name: logs
+          emptyDir: {}
       containers:
-        - name: hashgenerator
-          image: stevemcwin/log_output:1.7
+        - name: hashgenerator-reader
+          image: stevemcwin/log_reader:1.10
+          volumeMounts:
+            - name: logs
+              mountPath: /data
+        - name: hashgenerator-writer
+          image: stevemcwin/log_writer:1.10
+          volumeMounts:
+            - name: logs
+              mountPath: /data
