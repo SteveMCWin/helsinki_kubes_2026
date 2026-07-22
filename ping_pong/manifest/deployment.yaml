@@ -12,6 +12,13 @@ spec:
       labels:
         app: pingpong
     spec:
+      volumes:
+        - name: pingpong-pv
+          persistentVolumeClaim:
+            claimName: pingpong-pvc
       containers:
         - name: pingpong
-          image: stevemcwin/pingpong:1.9
+          image: stevemcwin/pingpong:1.11
+          volumeMounts:
+            - name: pingpong-pv
+              mountPath: /data
