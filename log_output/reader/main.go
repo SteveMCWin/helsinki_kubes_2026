@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -26,18 +28,22 @@ func readStatus(path string) (timestamp string, id string, err error) {
 	return parts[0], parts[1], nil
 }
 
-func readPingpongCount(path string) (int, error) {
-	data, err := os.ReadFile(path)
-	if os.IsNotExist(err) {
-		return 0, nil
-	}
+func readPingpongCountHTTP(url string) (int, error) {
+	resp, err := http.Get(url)
+
 	if err != nil {
-		return 0, err
+		return -1, err
+	}
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return -1, err
 	}
 
 	count, err := strconv.Atoi(strings.TrimSpace(string(data)))
 	if err != nil {
-		return 0, fmt.Errorf("unexpected pingpong count format: %q", data)
+		return -1, fmt.Errorf("unexpected pingpong count format: %q", data)
 	}
 
 	return count, nil
@@ -49,10 +55,7 @@ func main() {
 		path = "/data/status.log"
 	}
 
-	pingpongPath := os.Getenv("PINGPONG_FILE_PATH")
-	if pingpongPath == "" {
-		pingpongPath = "/pingpong-data/pingpong_count.txt"
-	}
+	pingpongUrl := "http://pingpong-svc:3456/pings"
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -67,7 +70,7 @@ func main() {
 			return
 		}
 
-		pingpongs, err := readPingpongCount(pingpongPath)
+		pingpongs, err := readPingpongCountHTTP(pingpongUrl)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})
 			return

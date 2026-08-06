@@ -18,7 +18,7 @@ spec:
             claimName: pingpong-pvc
       containers:
         - name: pingpong
-          image: stevemcwin/pingpong:1.11
+          image: stevemcwin/pingpong:2.1
           volumeMounts:
             - name: pingpong-pv
               mountPath: /data
