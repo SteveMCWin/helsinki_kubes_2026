@@ -7,7 +7,11 @@ spec:
   selector:
     app: todoapp
   ports:
-    - name: http
+    - name: http-front
       protocol: TCP
       port: 1234
       targetPort: 8080
+    - name: http-back
+      protocol: TCP
+      port: 1235
+      targetPort: 8081

@@ -12,22 +12,13 @@
 		<input id="todo-input" type="text" maxlength="140" placeholder="New todo">
 		<button id="todo-send">Send</button>
 	</div>
-	<ul id="todo-list"></ul>
+	<ul id="todo-list">
+		{{range .Todos}}
+		<li>{{.Text}}</li>
+		{{end}}
+	</ul>
 
 	<script>
-		async function loadTodos() {
-			const res = await fetch("/todos");
-			const todos = await res.json();
-
-			const list = document.getElementById("todo-list");
-			list.innerHTML = "";
-			todos.forEach(todo => {
-				const li = document.createElement("li");
-				li.textContent = todo.text;
-				list.appendChild(li);
-			});
-		}
-
 		async function sendTodo() {
 			const input = document.getElementById("todo-input");
 			const text = input.value.trim();
@@ -41,12 +32,10 @@
 				body: JSON.stringify({ text: text }),
 			});
 
-			input.value = "";
-			loadTodos();
+			window.location.reload();
 		}
 
 		document.getElementById("todo-send").addEventListener("click", sendTodo);
-		loadTodos();
 	</script>
 </body>
 </html>

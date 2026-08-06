@@ -1,4 +1,4 @@
-module todo_app
+module todo_front
 
 go 1.26.5
 

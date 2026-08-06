@@ -2,12 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,40 +20,11 @@ type newTodoRequest struct {
 	Text string `json:"text"`
 }
 
-func fetchImage(path string) error {
-	resp, err := http.Get("https://picsum.photos/600")
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(path, data, 0644)
-}
-
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8081"
 	}
-
-	imagePath := os.Getenv("IMAGE_FILE_PATH")
-	if imagePath == "" {
-		imagePath = "/data/image.jpg"
-	}
-
-	go func() {
-		for {
-			if err := fetchImage(imagePath); err != nil {
-				fmt.Printf("failed to fetch image: %v\n", err)
-			}
-			time.Sleep(10 * time.Minute)
-		}
-	}()
 
 	var mu sync.Mutex
 	todos := []Todo{
@@ -66,9 +34,6 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.StaticFile("/", "./front/index.html")
-	r.StaticFile("/style.css", "./front/style.css")
-	r.StaticFile("/image.jpg", imagePath)
 
 	r.GET("/todos", func(c *gin.Context) {
 		mu.Lock()
