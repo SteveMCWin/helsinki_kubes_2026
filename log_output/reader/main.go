@@ -55,7 +55,7 @@ func main() {
 		path = "/data/status.log"
 	}
 
-	pingpongUrl := "http://pingpong-svc:3456/pings"
+	pingpongUrl := "http://pingpong-svc.exercises:3456/pings"
 
 	port := os.Getenv("PORT")
 	if port == "" {
