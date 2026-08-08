@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-app-config
+data:
+  picsumUrl: "https://picsum.photos/600"
+  imageRefreshMinutes: "10"
+  todoBackendUrl: "http://todoapp-svc:1235/todos"
+  frontendPort: "8080"
+  backendPort: "8081"
+  imageFilePath: "/data/image.jpg"
+  htmlPath: "./front/index.html"
+  cssPath: "./front/style.css"
+  maxTodoLength: "140"

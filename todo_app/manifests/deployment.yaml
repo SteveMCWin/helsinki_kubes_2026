@@ -18,9 +18,56 @@ spec:
           emptyDir: {}
       containers:
         - name: todoapp-backend
-          image: stevemcwin/todo_app_backend:2.2
+          image: stevemcwin/todo_app_backend:2.6
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: backendPort
+            - name: MAX_TODO_LENGTH
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: maxTodoLength
         - name: todoapp-frontend
-          image: stevemcwin/todo_app_frontend:2.2
+          image: stevemcwin/todo_app_frontend:2.6
+          env:
+            - name: PICSUM_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: picsumUrl
+            - name: IMAGE_REFRESH_MINUTES
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: imageRefreshMinutes
+            - name: TODO_BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: todoBackendUrl
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: frontendPort
+            - name: IMAGE_FILE_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: imageFilePath
+            - name: HTML_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: htmlPath
+            - name: CSS_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-config
+                  key: cssPath
           volumeMounts:
             - name: images
               mountPath: /data

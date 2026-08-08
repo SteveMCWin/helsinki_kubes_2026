@@ -3,13 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 )
-
-const maxTodoLength = 140
 
 type Todo struct {
 	Text string `json:"text"`
@@ -23,15 +22,21 @@ type newTodoRequest struct {
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8081"
+		// port = "8081"
+		panic("PORT is not set")
+	}
+
+	maxLength := os.Getenv("MAX_TODO_LENGTH")
+	if maxLength == "" {
+		panic("MAX_TODO_LENGTH is not set")
+	}
+	maxTodoLength, err := strconv.Atoi(maxLength)
+	if err != nil {
+		panic(fmt.Sprintf("MAX_TODO_LENGTH is not a number: %q", maxLength))
 	}
 
 	var mu sync.Mutex
-	todos := []Todo{
-		{Text: "Learn Kubernetes", Done: false},
-		{Text: "Deploy the todo app", Done: false},
-		{Text: "Take a break", Done: true},
-	}
+	todos := []Todo{}
 
 	r := gin.Default()
 
