@@ -16,12 +16,27 @@ spec:
       volumes:
         - name: logs
           emptyDir: {}
+        - name: config
+          configMap:
+            name: hashgenerator-config
+            items:
+              - key: "information.txt"
+                path: "information.txt"
       containers:
         - name: hashgenerator-reader
-          image: stevemcwin/log_reader:2.1
+          image: stevemcwin/log_reader:2.5
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: hashgenerator-config
+                  key: message
           volumeMounts:
             - name: logs
               mountPath: /data
+            - name: config
+              mountPath: /config
+              readOnly: true
         - name: hashgenerator-writer
           image: stevemcwin/log_writer:1.10
           volumeMounts:

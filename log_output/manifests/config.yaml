@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hashgenerator-config
+data:
+  message: "Hello, World!"
+  information.txt: |
+    According to Dolbear's law, you can approximate the air temerature by listening to crickets.

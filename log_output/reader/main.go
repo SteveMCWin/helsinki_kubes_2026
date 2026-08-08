@@ -55,6 +55,18 @@ func main() {
 		path = "/data/status.log"
 	}
 
+	message := os.Getenv("MESSAGE")
+	if message == "" {
+		message = "DIDN'T READ THE MESSAGE"
+	} else {
+		message = "MESSAGE=" + message
+	}
+
+	fileData, err := os.ReadFile("/config/information.txt")
+	if err != nil {
+		panic(err)
+	}
+
 	pingpongUrl := "http://pingpong-svc.exercises:3456/pings"
 
 	port := os.Getenv("PORT")
@@ -77,9 +89,11 @@ func main() {
 		}
 
 		c.JSON(200, gin.H{
-			"timestamp": timestamp,
-			"string":    id,
-			"pingpongs": pingpongs,
+			"timestamp":     timestamp,
+			"string":        id,
+			"pingpongs":     pingpongs,
+			"file_contents": string(fileData),
+			"env_var":       message,
 		})
 	})
 
