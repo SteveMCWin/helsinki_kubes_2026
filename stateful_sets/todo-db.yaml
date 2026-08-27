@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-db-svc
+  namespace: project
+spec:
+  type: ClusterIP
+  #stateful sets expect the service to be headless (which allows for direct access to pods without proxying or load balancing)
+  clusterIP: None
+  selector:
+    app: todo-db
+  ports:
+    - port: 4321
+      protocol: TCP
+      targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: todo-db-stset
+  namespace: project
+spec:
+  selector:
+    matchLabels:
+      app: todo-db
+  serviceName: todo-db-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todo-db
+    spec:
+      containers:
+      - name: todo-db
+        image: postgres:18
+        env:
+          - name: POSTGRES_PASSWORD
+            value: myPassword123
+          - name: PGDATA
+            value: /data
+        ports:
+        - containerPort: 5432
+          name: todo-db-port
+        volumeMounts:
+        - name: todo-db-vol
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: todo-db-vol
+    spec:
+      storageClassName: local-path
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 256Mi
+

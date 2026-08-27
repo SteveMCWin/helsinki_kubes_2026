@@ -12,3 +12,8 @@ data:
   htmlPath: "./front/index.html"
   cssPath: "./front/style.css"
   maxTodoLength: "140"
+  dbHost: "todo-db-svc"
+  dbPort: "5432"
+  dbName: "postgres"
+  dbUser: "postgres"
+  dbPass: "myPassword123"

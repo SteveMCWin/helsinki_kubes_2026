@@ -14,7 +14,10 @@
 	</div>
 	<ul id="todo-list">
 		{{range .Todos}}
-		<li>{{.Text}}</li>
+		<li>
+			<span>{{.Text}}</span>
+			<button class="todo-delete" data-id="{{.ID}}">&times;</button>
+		</li>
 		{{end}}
 	</ul>
 
@@ -32,10 +35,21 @@
 				body: JSON.stringify({ text: text }),
 			});
 
+			input.value = "";
+			window.location.reload();
+		}
+
+		async function deleteTodo(id) {
+			await fetch(`/todos/${id}`, { method: "DELETE" });
 			window.location.reload();
 		}
 
 		document.getElementById("todo-send").addEventListener("click", sendTodo);
+		document.getElementById("todo-list").addEventListener("click", (event) => {
+			if (event.target.matches(".todo-delete")) {
+				deleteTodo(event.target.dataset.id);
+			}
+		});
 	</script>
 </body>
 </html>

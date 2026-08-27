@@ -49,4 +49,15 @@ li {
 	border-radius: 6px;
 	padding: 8px 12px;
 	margin: 6px 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.todo-delete {
+	background-color: #0d1321;
+	color: #c5d86d;
+	border-radius: 6px;
+	padding: 4px 10px;
+	margin-left: 8px;
 }
