@@ -13,13 +13,17 @@ spec:
       labels:
         app: pingpong
     spec:
-      volumes:
-        - name: pingpong-pv
-          persistentVolumeClaim:
-            claimName: pingpong-pvc
       containers:
         - name: pingpong
           image: stevemcwin/pingpong:2.1
-          volumeMounts:
-            - name: pingpong-pv
-              mountPath: /data
+          env:
+            - name: DB_HOST
+              value: postgresql-svc
+            - name: DB_PORT
+              value: "4321"
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: myPassword123
+            - name: DB_NAME
+              value: postgres

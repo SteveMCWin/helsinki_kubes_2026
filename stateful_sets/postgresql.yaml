@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-svc
+  namespace: exercises
+spec:
+  type: ClusterIP
+  #stateful sets expect the service to be headless (which allows for direct access to pods without proxying or load balancing)
+  clusterIP: None
+  selector:
+    app: pingpong-postgresql
+  ports:
+    - port: 4321
+      protocol: TCP
+      targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgre-stset
+  namespace: exercises
+spec:
+  selector:
+    matchLabels:
+      app: pingpong-postgresql
+  serviceName: postgresql-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pingpong-postgresql
+    spec:
+      containers:
+      - name: pingpong-postgresql
+        image: postgres:18
+        env:
+          - name: POSTGRES_PASSWORD
+            value: myPassword123
+          - name: PGDATA
+            value: /data
+        ports:
+        - containerPort: 5432
+          name: postgre-stset
+        volumeMounts:
+        - name: postgresql-vol
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql-vol
+    spec:
+      storageClassName: local-path
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 128Mi
+
