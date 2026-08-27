@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -80,12 +81,17 @@ func main() {
 		}
 
 		text := strings.TrimSpace(body.Text)
+		log.Printf("received todo: %q", text)
+
 		if text == "" {
+			log.Printf("rejected todo: text must not be empty")
 			c.JSON(400, gin.H{"error": "todo text must not be empty"})
 			return
 		}
 		if len(text) > maxTodoLength {
-			c.JSON(400, gin.H{"error": fmt.Sprintf("todo text must be %d characters or fewer", maxTodoLength)})
+			msg := fmt.Sprintf("todo text must be %d characters or fewer", maxTodoLength)
+			log.Printf("rejected todo: %s", msg)
+			c.JSON(400, gin.H{"error": msg})
 			return
 		}
 

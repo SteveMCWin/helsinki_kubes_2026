@@ -18,7 +18,7 @@ spec:
           emptyDir: {}
       containers:
         - name: todoapp-backend
-          image: stevemcwin/todo_app_backend:2.8
+          image: stevemcwin/todo_app_backend:2.10
           env:
             - name: PORT
               valueFrom:
