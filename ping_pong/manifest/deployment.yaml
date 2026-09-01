@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: stevemcwin/pingpong:3.2
+          image: stevemcwin/pingpong:3.4
           env:
             - name: DB_HOST
               value: postgresql-svc
