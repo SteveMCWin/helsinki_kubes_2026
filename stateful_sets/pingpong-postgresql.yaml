@@ -50,7 +50,7 @@ spec:
   - metadata:
       name: postgresql-vol
     spec:
-      storageClassName: local-path
+      #storageClassName: local-path
       accessModes:
       - ReadWriteOnce
       resources:
