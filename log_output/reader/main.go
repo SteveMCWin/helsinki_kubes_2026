@@ -75,6 +75,9 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.GET("/", func(c *gin.Context) {
+		c.Status(200)
+	})
 	r.GET("/status", func(c *gin.Context) {
 		timestamp, id, err := readStatus(path)
 		if err != nil {

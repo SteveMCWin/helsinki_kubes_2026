@@ -15,12 +15,12 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: stevemcwin/pingpong:2.1
+          image: stevemcwin/pingpong:3.2
           env:
             - name: DB_HOST
               value: postgresql-svc
             - name: DB_PORT
-              value: "4321"
+              value: "5432"
             - name: DB_USER
               value: postgres
             - name: DB_PASSWORD

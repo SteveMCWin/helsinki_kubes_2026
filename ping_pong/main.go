@@ -31,6 +31,9 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.GET("/", func(c *gin.Context) {
+		c.Status(200)
+	})
 	r.GET("/pingpong", func(c *gin.Context) {
 		var current int
 		if err := db.QueryRow("UPDATE counter SET count = count + 1 RETURNING count - 1").Scan(&current); err != nil {

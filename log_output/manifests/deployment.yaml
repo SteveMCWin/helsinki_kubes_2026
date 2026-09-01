@@ -24,7 +24,7 @@ spec:
                 path: "information.txt"
       containers:
         - name: hashgenerator-reader
-          image: stevemcwin/log_reader:2.5
+          image: stevemcwin/log_reader:3.2
           env:
             - name: MESSAGE
               valueFrom:

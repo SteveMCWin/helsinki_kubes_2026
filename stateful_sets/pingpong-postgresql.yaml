@@ -39,7 +39,7 @@ spec:
           - name: POSTGRES_PASSWORD
             value: myPassword123
           - name: PGDATA
-            value: /data
+            value: /data/pgdata
         ports:
         - containerPort: 5432
           name: postgre-stset
