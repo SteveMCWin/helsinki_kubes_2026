@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - manifests/config.yaml
+  - manifests/deployment.yaml
+  - manifests/service.yaml
+  - manifests/gateway.yaml
+  - manifests/http-route.yaml
+
+images:
+  - name: PROJECT/READER_IMAGE
+    newName: stevemcwin/log_reader:3.2
+  - name: PROJECT/WRITER_IMAGE
+    newName: stevemcwin/log_writer:1.10

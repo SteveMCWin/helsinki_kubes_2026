@@ -24,7 +24,7 @@ spec:
                 path: "information.txt"
       containers:
         - name: hashgenerator-reader
-          image: stevemcwin/log_reader:3.2
+          image: PROJECT/READER_IMAGE
           env:
             - name: MESSAGE
               valueFrom:
@@ -38,7 +38,7 @@ spec:
               mountPath: /config
               readOnly: true
         - name: hashgenerator-writer
-          image: stevemcwin/log_writer:1.10
+          image: PROJECT/WRITER_IMAGE
           volumeMounts:
             - name: logs
               mountPath: /data
