@@ -18,7 +18,7 @@ spec:
           emptyDir: {}
       containers:
         - name: todoapp-backend
-          image: stevemcwin/todo_app_backend:2.10
+          image: TODO/BACK
           env:
             - name: PORT
               valueFrom:
@@ -56,7 +56,7 @@ spec:
                   name: todo-app-config
                   key: dbPass
         - name: todoapp-frontend
-          image: stevemcwin/todo_app_frontend:2.8
+          image: TODO/FRONT
           env:
             - name: PICSUM_URL
               valueFrom:

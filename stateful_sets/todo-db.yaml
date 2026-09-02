@@ -39,7 +39,7 @@ spec:
           - name: POSTGRES_PASSWORD
             value: myPassword123
           - name: PGDATA
-            value: /data
+            value: /data/pgdata
         ports:
         - containerPort: 5432
           name: todo-db-port
@@ -50,7 +50,9 @@ spec:
   - metadata:
       name: todo-db-vol
     spec:
-      storageClassName: local-path
+      # GKE doesn't support local-path (which was used for k3d)
+      # when storageClassName is commented out, the default (standard-rwo in this case) is used
+      # storageClassName: local-path
       accessModes:
       - ReadWriteOnce
       resources:

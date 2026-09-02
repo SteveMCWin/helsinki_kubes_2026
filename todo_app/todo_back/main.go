@@ -52,6 +52,10 @@ func main() {
 
 	r := gin.Default()
 
+	r.GET("/", func(c *gin.Context) {
+		c.Status(200)
+	})
+
 	r.GET("/todos", func(c *gin.Context) {
 		rows, err := db.Query("SELECT id, text, done FROM todos ORDER BY id")
 		if err != nil {
