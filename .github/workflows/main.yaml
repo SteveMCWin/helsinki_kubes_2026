@@ -82,7 +82,7 @@ jobs:
 
           # If a tag was pushed, this command will fail, so we put '|| true' to continue
           kubectl create namespace $NAMESPACE_NAME || true
-          kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
+          kubectl config set-context --current --namespace=$NAMESPACE_NAME
           kustomize edit set namespace $NAMESPACE_NAME
 
           kustomize edit set image TODO/FRONT=$FRONTEND_IMAGE_TAG

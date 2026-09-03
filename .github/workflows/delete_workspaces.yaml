@@ -1,0 +1,63 @@
+name: Delete workspace
+
+on:
+  delete:
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  NAMESPACE_NAME: ${{ github.event.ref }}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  delete-branch-env:
+    name: Delete branch environment
+    runs-on: ubuntu-latest
+    environment: GKE_PROJECT
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: "${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}"
+          service_account: "${{ secrets.SERVICE_ACCOUNT }}"
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: 'Use gcloud CLI'
+        run: gcloud info
+
+      - name: 'Get GKE credentials'
+        uses: google-github-actions/get-gke-credentials@v3
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name: 'Get namespace'
+        run: |-
+          if [[ ${{ github.event.ref_type }} == "tag" ]]; then
+            echo "Tags are ignored for namespace deletion, exiting."
+            exit 1
+          fi
+
+          # We probably won't be deleting the master brach so I'll ignore it
+          if [[ ${{ env.NAMESPACE_NAME }} == "project" ]] || [[ $NAMESPACE_NAME == "master" ]]; then
+            echo "Cannot delete project namespace!!"
+            exit 2
+          fi
+
+      - name: "Delete namespace"
+        if: success()
+        run: |-
+          echo "DELETING NAMESPACE ${{ env.NAMESPACE_NAME }}"
+          kubectl delete namespace ${{ env.NAMESPACE_NAME }} || true
+          kubectl get namespaces
+
