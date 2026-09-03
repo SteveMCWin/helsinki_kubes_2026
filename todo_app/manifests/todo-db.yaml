@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-db-svc
-  namespace: project
+  # namespace: project
 spec:
   type: ClusterIP
   #stateful sets expect the service to be headless (which allows for direct access to pods without proxying or load balancing)

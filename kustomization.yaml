@@ -2,8 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespaces/namespaces.yaml
-  - stateful_sets/pingpong-postgresql.yaml
-  - stateful_sets/todo-db.yaml
   - ping_pong
   - log_output
   - todo_app

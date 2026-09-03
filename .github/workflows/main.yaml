@@ -69,10 +69,25 @@ jobs:
 
       - name: Deploy
         run: |-
-            cd todo_app
-            kustomize edit set image TODO/FRONT=$FRONTEND_IMAGE_TAG
-            kustomize edit set image TODO/BACK=$BACKEND_IMAGE_TAG
-            cd ..
-            kustomize build . | kubectl apply -f -
-            kubectl rollout status deployment $SERVICE -n project
-            kubectl get services -o wide -n project
+          # Define namespace name based on branch that was pushed to
+          NAMESPACE_NAME=${GITHUB_REF#refs/heads/}
+
+          # We want the master namespace to be project namespace
+          if [[ $NAMESPACE_NAME == "master" ]]; then
+            NAMESPACE_NAME="project"
+          fi
+
+          # I'm guessing that this pipeline is only meant for the project, since the course didn't explicitly mention the exercies services
+          cd todo_app
+
+          # If a tag was pushed, this command will fail, so we put '|| true' to continue
+          kubectl create namespace $NAMESPACE_NAME || true
+          kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
+          kustomize edit set namespace $NAMESPACE_NAME
+
+          kustomize edit set image TODO/FRONT=$FRONTEND_IMAGE_TAG
+          kustomize edit set image TODO/BACK=$BACKEND_IMAGE_TAG
+
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment $SERVICE -n $NAMESPACE_NAME
+          kubectl get services -o wide -n $NAMESPACE_NAME

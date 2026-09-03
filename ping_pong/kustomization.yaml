@@ -4,6 +4,7 @@ resources:
   - manifest/deployment.yaml
   - manifest/service.yaml
   - manifest/http-route.yaml
+  - manifest/pingpong-postgresql.yaml
 images:
   - name: PROJECT/IMAGE
     newName: stevemcwin/pingpong:3.4
