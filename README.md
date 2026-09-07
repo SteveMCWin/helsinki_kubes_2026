@@ -23,3 +23,8 @@
 - You own backups, HA/failover, monitoring, and security patching yourself
 - Storage scaling is manual (StorageClass/PVC resizing)
 - Your new friend won't have time to play because they are managing backups, security patches and other stuff
+
+# 3.12
+
+![Logs - adding a todo item](.github/screenshots/todo-app-log.png)
+###### Logs - adding a todo item
