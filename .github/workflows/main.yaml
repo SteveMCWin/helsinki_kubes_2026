@@ -15,6 +15,8 @@ env:
   IMAGE_REPO : my-kubes-repo
   FRONTEND_IMAGE: todo_app_frontend
   BACKEND_IMAGE: todo_app_backend
+  ADD_TODO_IMAGE: todo_cron_job
+  DB_BACKUP_IMAGE: db_backup_job
   SERVICE: todo-app
   BRANCH: ${{ github.ref_name }}
 
@@ -53,16 +55,22 @@ jobs:
         run: |-
           echo "FRONTEND_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$IMAGE_REPO/$FRONTEND_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
           echo "BACKEND_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$IMAGE_REPO/$BACKEND_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+          echo "ADD_TODO_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$IMAGE_REPO/$ADD_TODO_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+          echo "DB_BACKUP_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$IMAGE_REPO/$DB_BACKUP_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: Build
         run: |-
           docker build --tag $FRONTEND_IMAGE_TAG ./todo_app/todo_front
           docker build --tag $BACKEND_IMAGE_TAG ./todo_app/todo_back
+          docker build --tag $ADD_TODO_IMAGE_TAG ./todo_app/add_todo_job
+          docker build --tag $DB_BACKUP_IMAGE_TAG ./todo_app/db_backup_job
 
       - name: Publish
         run: |-
           docker push $FRONTEND_IMAGE_TAG
           docker push $BACKEND_IMAGE_TAG
+          docker push $ADD_TODO_IMAGE_TAG
+          docker push $DB_BACKUP_IMAGE_TAG
 
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
@@ -87,6 +95,8 @@ jobs:
 
           kustomize edit set image TODO/FRONT=$FRONTEND_IMAGE_TAG
           kustomize edit set image TODO/BACK=$BACKEND_IMAGE_TAG
+          kustomize edit set image TODO/ADD=$ADD_TODO_IMAGE_TAG
+          kustomize edit set image TODO/BACKUP=$DB_BACKUP_IMAGE_TAG
 
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE -n $NAMESPACE_NAME

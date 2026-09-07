@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-backup-job
+  # namespace: project
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: db-backup-job
+            image: TODO/BACKUP
+            imagePullPolicy: Always
+            env:
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: todo-app-config
+                    key: dbHost
+              - name: DB_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: todo-app-config
+                    key: dbPort
+              - name: DB_NAME
+                valueFrom:
+                  configMapKeyRef:
+                    name: todo-app-config
+                    key: dbName
+              - name: DB_USER
+                valueFrom:
+                  configMapKeyRef:
+                    name: todo-app-config
+                    key: dbUser
+              - name: DB_PASS
+                valueFrom:
+                  configMapKeyRef:
+                    name: todo-app-config
+                    key: dbPass
+              - name: GCS_DEST
+                value: gs://todo-db-backup/backups
+              - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: /etc/service-account-key/key.json
+            volumeMounts:
+              - name: service-account-key
+                mountPath: /etc/service-account-key
+                readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: service-account-key
+              secret:
+                secretName: service-account-key

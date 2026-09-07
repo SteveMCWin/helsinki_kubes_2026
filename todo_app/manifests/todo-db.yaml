@@ -20,7 +20,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: todo-db-stset
-  namespace: project
+  # namespace: project
 spec:
   selector:
     matchLabels:

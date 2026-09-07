@@ -4,6 +4,7 @@ resources:
   - manifests/todo-db.yaml
   - manifests/config.yaml
   - manifests/cron-job.yaml
+  - manifests/db-backup-job.yaml
   - manifests/deployment.yaml
   - manifests/ingress.yaml
   - manifests/service.yaml
@@ -12,4 +13,7 @@ images:
     newName: stevemcwin/todo_app_frontend:2.8
   - name: TODO/BACK
     newName: stevemcwin/todo_app_backend:2.10
-
+  - name: TODO/ADD
+    newName: stevemcwin/todo_cron_job:2.9
+  - name: TODO/BACKUP
+    newName: stevemcwin/db_backup_job:3.10
