@@ -19,6 +19,18 @@ spec:
       containers:
         - name: todoapp-backend
           image: TODO/BACK
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /readyz
+              port: 8081 # Note: cannot be set through config map, so if that changes, we are screwed
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /livez
+              port: 8081 # Note: cannot be set through config map, so if that changes, we are screwed
           resources:
             requests:
               cpu: "250m"
@@ -64,6 +76,18 @@ spec:
                   key: dbPass
         - name: todoapp-frontend
           image: TODO/FRONT
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /readyz
+              port: 8080 # Note: cannot be set through config map, so if that changes, we are screwed
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /livez
+              port: 8080 # Note: cannot be set through config map, so if that changes, we are screwed
           resources:
             requests:
               cpu: "250m"

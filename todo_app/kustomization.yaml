@@ -10,9 +10,9 @@ resources:
   - manifests/http-route.yaml
 images:
   - name: TODO/FRONT
-    newName: stevemcwin/todo_app_frontend:2.8
+    newName: stevemcwin/todo_app_frontend:4.2
   - name: TODO/BACK
-    newName: stevemcwin/todo_app_backend:2.10
+    newName: stevemcwin/todo_app_backend:4.2
   - name: TODO/ADD
     newName: stevemcwin/todo_cron_job:2.9
   - name: TODO/BACKUP

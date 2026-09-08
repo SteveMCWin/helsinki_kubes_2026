@@ -7,6 +7,7 @@
 <body>
 	<h1>Todo App</h1>
 	<img src="/image.jpg" alt="Random image">
+	<button id="break-btn">Break the app</button>
 
 	<div class="input-row">
 		<input id="todo-input" type="text" maxlength="140" placeholder="New todo">
@@ -44,7 +45,13 @@
 			window.location.reload();
 		}
 
+		async function breakApp() {
+			await fetch("/break", { method: "POST" });
+			document.body.innerHTML = "SYSTEM FAILURE";
+		}
+
 		document.getElementById("todo-send").addEventListener("click", sendTodo);
+		document.getElementById("break-btn").addEventListener("click", breakApp);
 		document.getElementById("todo-list").addEventListener("click", (event) => {
 			if (event.target.matches(".todo-delete")) {
 				deleteTodo(event.target.dataset.id);

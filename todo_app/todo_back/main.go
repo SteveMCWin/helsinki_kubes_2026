@@ -56,6 +56,18 @@ func main() {
 		c.Status(200)
 	})
 
+	r.GET("/readyz", func(c *gin.Context) {
+		if err := db.Ping(); err != nil {
+			c.Status(503)
+			return
+		}
+		c.Status(200)
+	})
+
+	r.GET("/livez", func(c *gin.Context) {
+		c.Status(200)
+	})
+
 	r.GET("/todos", func(c *gin.Context) {
 		rows, err := db.Query("SELECT id, text, done FROM todos ORDER BY id")
 		if err != nil {

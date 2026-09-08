@@ -7,9 +7,15 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	healthMu  sync.Mutex
+	isHealthy = true
 )
 
 type Todo struct {
@@ -90,7 +96,39 @@ func main() {
 	r.StaticFile("/style.css", cssPath)
 	r.StaticFile("/image.jpg", imagePath)
 
+	r.GET("/readyz", func(c *gin.Context) {
+		c.Status(200)
+	})
+
+	r.GET("/livez", func(c *gin.Context) {
+		healthMu.Lock()
+		healthy := isHealthy
+		healthMu.Unlock()
+
+		if !healthy {
+			c.JSON(500, gin.H{"status": "unhealthy"})
+			return
+		}
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+
+	r.POST("/break", func(c *gin.Context) {
+		healthMu.Lock()
+		isHealthy = false
+		healthMu.Unlock()
+		c.Status(200)
+	})
+
 	r.GET("/", func(c *gin.Context) {
+		healthMu.Lock()
+		healthy := isHealthy
+		healthMu.Unlock()
+
+		if !healthy {
+			c.String(200, "SYSTEM FAILURE")
+			return
+		}
+
 		resp, err := http.Get(todoBackendUrl)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})

@@ -1,3 +1,7 @@
+:root {
+	--red: #e5484d;
+}
+
 body {
 	background-color: #0d1321;
 	color: #ffeddf;
@@ -52,6 +56,11 @@ li {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+#break-btn {
+	background-color: var(--red);
+	color: #ffeddf;
 }
 
 .todo-delete {
