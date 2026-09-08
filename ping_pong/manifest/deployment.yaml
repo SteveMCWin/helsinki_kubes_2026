@@ -16,6 +16,12 @@ spec:
       containers:
         - name: pingpong
           image: PROJECT/IMAGE
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /readyz
+              port: 8080
           env:
             - name: DB_HOST
               value: postgresql-svc

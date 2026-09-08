@@ -7,4 +7,4 @@ resources:
   - manifest/pingpong-postgresql.yaml
 images:
   - name: PROJECT/IMAGE
-    newName: stevemcwin/pingpong:3.4
+    newName: stevemcwin/pingpong:4.1

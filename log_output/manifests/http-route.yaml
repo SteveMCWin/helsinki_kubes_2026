@@ -5,7 +5,8 @@ metadata:
   namespace: exercises
 spec:
   parentRefs:
-  - name: hashgenerator-gateway
+  - name: the-gateway
+    namespace: project
   rules:
   - matches:
     - path:

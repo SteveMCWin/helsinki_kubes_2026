@@ -23,13 +23,6 @@ func main() {
 	}
 	defer db.Close()
 
-	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS counter (count INTEGER)"); err != nil {
-		panic(err)
-	}
-	if _, err := db.Exec("INSERT INTO counter (count) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter)"); err != nil {
-		panic(err)
-	}
-
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
 		var current int
@@ -39,6 +32,13 @@ func main() {
 		}
 
 		c.String(200, "pong %d", current)
+	})
+	r.GET("/readyz", func(c *gin.Context) {
+		if err := ensureSchema(db); err != nil {
+			c.Status(503)
+			return
+		}
+		c.Status(200)
 	})
 	r.GET("/pings", func(c *gin.Context) {
 		var count int
@@ -52,4 +52,14 @@ func main() {
 
 	fmt.Printf("Server started in port %s\n", port)
 	r.Run(":" + port)
+}
+
+func ensureSchema(db *sql.DB) error {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS counter (count INTEGER)"); err != nil {
+		return err
+	}
+	if _, err := db.Exec("INSERT INTO counter (count) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM counter)"); err != nil {
+		return err
+	}
+	return nil
 }

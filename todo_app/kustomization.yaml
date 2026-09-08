@@ -6,8 +6,8 @@ resources:
   - manifests/cron-job.yaml
   - manifests/db-backup-job.yaml
   - manifests/deployment.yaml
-  - manifests/ingress.yaml
   - manifests/service.yaml
+  - manifests/http-route.yaml
 images:
   - name: TODO/FRONT
     newName: stevemcwin/todo_app_frontend:2.8

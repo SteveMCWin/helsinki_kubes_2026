@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-db-svc
-  # namespace: project
+  namespace: project
 spec:
   type: ClusterIP
   #stateful sets expect the service to be headless (which allows for direct access to pods without proxying or load balancing)
@@ -20,7 +20,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: todo-db-stset
-  # namespace: project
+  namespace: project
 spec:
   selector:
     matchLabels:
@@ -52,7 +52,7 @@ spec:
     spec:
       # GKE doesn't support local-path (which was used for k3d)
       # when storageClassName is commented out, the default (standard-rwo in this case) is used
-      # storageClassName: local-path
+      storageClassName: local-path
       accessModes:
       - ReadWriteOnce
       resources:

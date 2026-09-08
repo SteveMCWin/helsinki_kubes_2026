@@ -78,6 +78,13 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.Status(200)
 	})
+	r.GET("/readyz", func(c *gin.Context) {
+		if _, err := readPingpongCountHTTP(pingpongUrl); err != nil {
+			c.Status(503)
+			return
+		}
+		c.Status(200)
+	})
 	r.GET("/status", func(c *gin.Context) {
 		timestamp, id, err := readStatus(path)
 		if err != nil {
