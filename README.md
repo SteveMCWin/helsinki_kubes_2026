@@ -26,5 +26,9 @@
 
 # 3.12
 
-![Logs - adding a todo item](.github/screenshots/todo-app-log.png)
 ###### Logs - adding a todo item
+![Logs - adding a todo item](.github/screenshots/todo-app-log.png)
+
+# 4.3
+###### PromQL Query - pods created by statefulset in monitoring namespace
+![PromQL Query - pods created by statefulset](.github/screenshots/promql-querry.png)
