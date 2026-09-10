@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: cpu-rate
+  namespace: exercises
+spec:
+  metrics:
+  - name: cpu-rate
+    interval: 1m
+    count: 5
+    failureCondition: result[0] > 0.85
+    provider:
+      prometheus:
+        address: http://prom-prometheus-server.monitoring.svc.cluster.local:80
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="exercises", container!=""}[5m]))

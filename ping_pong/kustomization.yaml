@@ -1,7 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - manifest/deployment.yaml
+  # - manifest/deployment.yaml
+  - manifest/rollout.yaml
+  - manifest/analysis.yaml
   - manifest/service.yaml
   - manifest/http-route.yaml
   - manifest/pingpong-postgresql.yaml
