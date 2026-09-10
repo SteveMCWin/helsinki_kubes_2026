@@ -120,6 +120,32 @@ func main() {
 		c.JSON(201, todo)
 	})
 
+	r.PUT("/todos/:id", func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(400, gin.H{"error": "invalid todo id"})
+			return
+		}
+
+		result, err := db.Exec("UPDATE todos SET done = true WHERE id = $1", id)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+
+		rowsAffected, err := result.RowsAffected()
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		if rowsAffected == 0 {
+			c.JSON(404, gin.H{"error": "todo not found"})
+			return
+		}
+
+		c.Status(204)
+	})
+
 	r.DELETE("/todos/:id", func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {

@@ -41,6 +41,14 @@ button {
 	margin-left: 8px;
 }
 
+button:hover {
+	filter: brightness(1.15);
+}
+
+button:active {
+	filter: brightness(0.85);
+}
+
 ul {
 	list-style: none;
 	padding: 0;
@@ -61,6 +69,25 @@ li {
 #break-btn {
 	background-color: var(--red);
 	color: #ffeddf;
+}
+
+.todo-actions {
+	display: flex;
+	align-items: center;
+}
+
+.todo-complete {
+	background-color: #0d1321;
+	color: #c5d86d;
+	border-radius: 6px;
+	padding: 4px 10px;
+	margin-left: 8px;
+}
+
+.todo-check {
+	color: #0d1321;
+	margin-left: 8px;
+	font-weight: bold;
 }
 
 .todo-delete {

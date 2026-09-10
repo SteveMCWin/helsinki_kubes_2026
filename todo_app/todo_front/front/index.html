@@ -17,7 +17,14 @@
 		{{range .Todos}}
 		<li>
 			<span>{{.Text}}</span>
-			<button class="todo-delete" data-id="{{.ID}}">&times;</button>
+			<div class="todo-actions">
+				{{if .Done}}
+				<span class="todo-check">&check;</span>
+				{{else}}
+				<button class="todo-complete" data-id="{{.ID}}">&check;</button>
+				{{end}}
+				<button class="todo-delete" data-id="{{.ID}}">&times;</button>
+			</div>
 		</li>
 		{{end}}
 	</ul>
@@ -45,6 +52,11 @@
 			window.location.reload();
 		}
 
+		async function completeTodo(id) {
+			await fetch(`/todos/${id}`, { method: "PUT" });
+			window.location.reload();
+		}
+
 		async function breakApp() {
 			await fetch("/break", { method: "POST" });
 			document.body.innerHTML = "SYSTEM FAILURE";
@@ -55,6 +67,8 @@
 		document.getElementById("todo-list").addEventListener("click", (event) => {
 			if (event.target.matches(".todo-delete")) {
 				deleteTodo(event.target.dataset.id);
+			} else if (event.target.matches(".todo-complete")) {
+				completeTodo(event.target.dataset.id);
 			}
 		});
 	</script>
